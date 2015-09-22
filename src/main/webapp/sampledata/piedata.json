@@ -1,0 +1,64 @@
+{
+    "tid": 34,
+    "action": "Dashboard2Service",
+    "method": "getStrategicSitesPOCityChartData",
+    "result": [
+        {
+            "fkcount": 359,
+            "description": "Mumbai"
+        },
+        {
+            "fkcount": 10982,
+            "description": "Heredia"
+        },
+        {
+            "fkcount": 1039,
+            "description": "Makati City"
+        },
+        {
+            "fkcount": 106,
+            "description": "Buffalo"
+        },
+        {
+            "fkcount": 342,
+            "description": "Budapest"
+        },
+        {
+            "fkcount": 27,
+            "description": "Dalian"
+        },
+        {
+            "fkcount": 694,
+            "description": "Belfast"
+        },
+        {
+            "fkcount": 1306,
+            "description": "Tampa"
+        },
+        {
+            "fkcount": 343,
+            "description": "Mexico City"
+        },
+        {
+            "fkcount": 221,
+            "description": "Shanghai"
+        },
+        {
+            "fkcount": 199,
+            "description": "TCS Chennai"
+        },
+        {
+            "fkcount": 129,
+            "description": "TCS Gurgaon"
+        },
+        {
+            "fkcount": 1860,
+            "description": "Regulatory Restricted"
+        },
+        {
+            "fkcount": 1607,
+            "description": "Other"
+        }
+    ],
+    "type": "rpc"
+}
