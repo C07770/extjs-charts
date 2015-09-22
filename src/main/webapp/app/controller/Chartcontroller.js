@@ -74,12 +74,13 @@ Ext.define('ERecon.controller.Chartcontroller', {
 								size : 7,
 								radius : 7
 							},
-							markerCfg : {
-								type : 'cross',
-								size : 4,
-								radius : 4,
-								'stroke-width' : 0
-							}
+							tips: {
+								entityName: entityName,
+				                trackMouse: true,
+				                renderer: function(storeItem, item) {
+				                    this.update(this.entityName +' (' + storeItem.get(this.entityName)+ ')');
+				                }
+				            },
 						};
 
 						if (!Ext.Array.contains(trendLines, entityName)) {
