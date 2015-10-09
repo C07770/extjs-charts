@@ -3,7 +3,7 @@ Ext.define('ERecon.controller.Chartcontroller', {
 	requires : [ 'ERecon.store.Trendstore', 'ERecon.model.Trendmodel',
 			'ERecon.model.Piemodel', 'ERecon.store.Piestore' ],
 
-	views : [ 'Trendchart', 'Piechart' ],
+	views : [ 'Trendchart', 'Piechart', 'CustomeLegend'],
 
 	models : [ 'Piemodel', 'Trendmodel' ],
 	stores : [ 'Piestore', 'Trendstore' ],
@@ -14,26 +14,74 @@ Ext.define('ERecon.controller.Chartcontroller', {
 	}, {
 		ref : 'trendchart',
 		selector : 'trendchart',
+	} , {
+		ref : 'customelegend',
+		selector : 'customelegend',
 	} ],
 
 	init : function() {
+		this.chartloaded = 0;
 		this.control({
-			'viewport > panel > toolbar > button[action=renderChart]' : {
+			'viewport > container > panel > toolbar > button[action=renderChart]' : {
 				click : this.renderChart
+			},
+			'piechart' : {
+				// legendItemMouseOver : this.onLegendItemMouseOver
+			},
+			'trendchart' : {
+				// legendItemMouseOver : this.onLegendItemMouseOver
 			},
 			scope : this
 		});
+	},
+	
+	onLegendItemMouseOver : function(legendIndex, b, c) {
+		debugger;
+		var pieChart = this.getPiechart();
+		var trendChart = this.getTrendchart();
+		var pieChartLegend = pieChart.legend.items[legendIndex];
+		var trendChartLegend = trendChart.legend.items[legendIndex];
+		var pieChartSprite = pieChartLegend.items[0];
+		var trendChartSprite = trendChartLegend.items[0];
+		
+		// var trendChartSeries = trendChart.series.items[legendIndex];
+		// trendChartSeries.highlightItem();
+		
+		// pieChartSprite.fireEvent("mousedown");
+		trendChartSprite.fireEvent("mouseover");
+		// nextLegendItemsSprites[0].fireEvent("mouseover");
+		// sprite.relayEvents(nextLegendItemsSprites[0], ['click', 'mousedown',
+		// 'mouseout', 'mouseover', 'mouseup']);
 	},
 
 	renderChart : function() {
 		this.renderPieChart();
 		this.renderTrendChart();
 	},
+	
+	renderLegends : function() {
+		this.chartloaded = 0;
+		var chartContainer  = Ext.ComponentQuery.query('viewport > container[itemId=chartcontainer]')[0];
+		var legendContainer = Ext.ComponentQuery.query('viewport > container > container[itemId=commonlegend]')[0];
+		chartContainer.remove(legendContainer);
+		var pieChart = this.getPiechart();
+		var trendChart = this.getTrendchart();
+		var data = pieChart.series.items[0].yField;
+		legendContainer = Ext.create('ERecon.view.CustomeLegend', {
+			itemId : 'commonlegend',
+			xtype : 'customelegend',
+			data: data,
+			multiSeries : [ pieChart.series, trendChart.series ],
+			padding : '5 150 20 200', 
+		});
+		chartContainer.add(legendContainer);
+	},
 
 	renderPieChart : function() {
-		var pieChart = this.getTrendchart();
-		pieChart.series.clear();
-		pieChart.surface.removeAll();
+		var me = this;
+		var pieChart = this.getPiechart();
+		// pieChart.series.clear();
+		// pieChart.surface.removeAll();
 		
 		var pieChartStore = this.getPiestoreStore();
 		this.requestData('piedata', function(chartData) {
@@ -44,10 +92,14 @@ Ext.define('ERecon.controller.Chartcontroller', {
 			pieChartStore.loadData(chartData);
 			pieChart.setLoading(false);
 			pieChart.setVisible(true);
+			me.chartloaded++;
+			if(me.chartloaded === 2) 
+				me.renderLegends();
 		});
 	},
 
 	renderTrendChart : function() {
+		var me = this;
 		var trendChart = this.getTrendchart();
 		trendChart.series.clear();
 		trendChart.surface.removeAll();
@@ -98,17 +150,21 @@ Ext.define('ERecon.controller.Chartcontroller', {
 			
 			trendChart.getStore().loadData(chartData);
 			trendChart.setLoading(false);
+			me.chartloaded++;
+			if(me.chartloaded === 2) 
+				me.renderLegends();
 		});
 		trendChart.redraw();
 	},
 
 	requestData : function(requestedData, callback) {
+		var me = this;
 		Ext.Ajax.request({
 			url : 'http://localhost:8080/sampledata/' + requestedData
 					+ '.json',
 			success : function(response, opts) {
 				var data = Ext.decode(response.responseText);
-				callback(data.result);
+				callback(data.result, me);
 			},
 			failure : function(response, opts) {
 				console.log('server-side failure with status code '
