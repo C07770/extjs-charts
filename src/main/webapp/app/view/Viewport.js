@@ -2,7 +2,7 @@ Ext.define('ERecon.view.Viewport', {
 	extend : 'Ext.container.Viewport',
 
 	requires : [ 'ERecon.view.Piechart', 'ERecon.view.Trendchart',
-			'ERecon.view.CustomeLegend' ],
+			'ERecon.view.CommonLegend', 'Ext.ux.chart.CommonLegendComponent' ],
 
 	items : [ {
 		itemId : 'chartcontainer',
@@ -34,11 +34,18 @@ Ext.define('ERecon.view.Viewport', {
 				text : 'Render Chart',
 				action : 'renderChart'
 			} ]
+		}/*, {
+			xtype : 'commonLegendComponent',
+			id : 'commonlegend',
+			legend : {
+				position : 'top'
+			},
+			height : 200
 		}, {
 			itemId : 'commonlegend',
-			xtype : 'customelegend',
+			xtype : 'commonlegend',
 			data : [],
 			padding : '5 150 20 200',
-		} ]
+		} */]
 	} ]
 });

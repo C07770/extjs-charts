@@ -1,6 +1,6 @@
-Ext.define('ERecon.view.CustomeLegend', {
+Ext.define('ERecon.view.CommonLegend', {
 	extend : 'Ext.container.Container',
-	alias : 'widget.customelegend',
+	alias : 'widget.commonlegend',
 
 	layout : 'column',
 
@@ -19,13 +19,14 @@ Ext.define('ERecon.view.CustomeLegend', {
 		var c = 0;
 		for (var i = 0; i < data.length; i++) {
 			c = c <= i ? i : 0;
-			this.items[i] = this.createLegendItem(i, data[i], colors[c], this)
+			this.items[i] = this.createLegendItem(i, data[i], colors[c])
 		}
 
 		this.callParent(arguments);
 	},
 
-	createLegendItem : function(legendIndex, label, color, me) {
+	createLegendItem : function(legendIndex, label, color) {
+		var me  = this;
 		return {
 			xtype : 'container',
 			legendIndex : legendIndex,
@@ -94,6 +95,7 @@ Ext.define('ERecon.view.CustomeLegend', {
 					label.setDisabled(false);
 				}
 				this.toggle = !this.toggle;
+				series.chart.redraw();
 			});
 		});
 		e.el.on('mouseover', function(ev, ed) {

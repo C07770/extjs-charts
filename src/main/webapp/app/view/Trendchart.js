@@ -29,5 +29,12 @@ Ext.define('ERecon.view.Trendchart', {
 		position : 'bottom',
 		fields : [ 'reconperiod' ],
 		title : 'Recon Period'
-	} ]
+	} ],
+
+	hideLegend : function() {
+		var legendItems = this.legend.items;
+		for (var i = 0; i < legendItems.length; i++) {
+			legendItems[i].hide(true);
+		}
+	}
 });

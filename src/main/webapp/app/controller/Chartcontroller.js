@@ -3,7 +3,7 @@ Ext.define('ERecon.controller.Chartcontroller', {
 	requires : [ 'ERecon.store.Trendstore', 'ERecon.model.Trendmodel',
 			'ERecon.model.Piemodel', 'ERecon.store.Piestore' ],
 
-	views : [ 'Trendchart', 'Piechart', 'CustomeLegend'],
+	views : [ 'Trendchart', 'Piechart', 'CommonLegend'],
 
 	models : [ 'Piemodel', 'Trendmodel' ],
 	stores : [ 'Piestore', 'Trendstore' ],
@@ -15,8 +15,8 @@ Ext.define('ERecon.controller.Chartcontroller', {
 		ref : 'trendchart',
 		selector : 'trendchart',
 	} , {
-		ref : 'customelegend',
-		selector : 'customelegend',
+		ref : 'commonlegend',
+		selector : 'commonlegend',
 	} ],
 
 	init : function() {
@@ -26,32 +26,50 @@ Ext.define('ERecon.controller.Chartcontroller', {
 				click : this.renderChart
 			},
 			'piechart' : {
-				// legendItemMouseOver : this.onLegendItemMouseOver
-			},
-			'trendchart' : {
-				// legendItemMouseOver : this.onLegendItemMouseOver
+				legendItemMouseOver : this.onLegendItemMouseOver,
+				legendItemMouseOut  : this.onLegendItemMouseOut,
+				legendItemMouseDown : this.onLegendItemMouseDown
 			},
 			scope : this
 		});
 	},
 	
 	onLegendItemMouseOver : function(legendIndex, b, c) {
-		debugger;
-		var pieChart = this.getPiechart();
 		var trendChart = this.getTrendchart();
-		var pieChartLegend = pieChart.legend.items[legendIndex];
 		var trendChartLegend = trendChart.legend.items[legendIndex];
-		var pieChartSprite = pieChartLegend.items[0];
 		var trendChartSprite = trendChartLegend.items[0];
-		
-		// var trendChartSeries = trendChart.series.items[legendIndex];
-		// trendChartSeries.highlightItem();
-		
-		// pieChartSprite.fireEvent("mousedown");
 		trendChartSprite.fireEvent("mouseover");
-		// nextLegendItemsSprites[0].fireEvent("mouseover");
-		// sprite.relayEvents(nextLegendItemsSprites[0], ['click', 'mousedown',
-		// 'mouseout', 'mouseover', 'mouseup']);
+		
+//		var trendChartSeries = trendChart.series.items[legendIndex];
+//		trendChartSeries.items[legendIndex]._index = legendIndex;
+//		trendChartSeries.highlightItem();
+	},
+	onLegendItemMouseOut : function(legendIndex, b, c) {
+		var trendChart = this.getTrendchart();
+		var trendChartLegend = trendChart.legend.items[legendIndex];
+		var trendChartSprite = trendChartLegend.items[0];
+		trendChartSprite.fireEvent("mouseout");
+		
+//		var trendChartSeries = trendChart.series.items[legendIndex];
+//		trendChartSeries.items[legendIndex]._index = legendIndex;
+//		trendChartSeries.unHighlightItem();
+	},
+	onLegendItemMouseDown : function(legendIndex, b, c) {
+		var trendChart = this.getTrendchart();
+		var trendChartLegend = trendChart.legend.items[legendIndex];
+		var trendChartSprite = trendChartLegend.items[0];
+		trendChartSprite.fireEvent("mousedown");
+		
+		
+//		var trendChartSeries = trendChart.series.items[legendIndex];
+//		trendChartSeries.items[legendIndex]._index = legendIndex;
+//		if (!this.toggle) {
+//			trendChartSeries.hideAll(legendIndex);
+//        } else {
+//        	trendChartSeries.showAll(legendIndex);
+//        }
+//        this.toggle = !this.toggle;
+//        trendChartSeries.chart.redraw();
 	},
 
 	renderChart : function() {
@@ -60,21 +78,26 @@ Ext.define('ERecon.controller.Chartcontroller', {
 	},
 	
 	renderLegends : function() {
+		this.getTrendchart().legend.toggle(false);
+		return;
+		Ext.getCmp('commonlegend').drawLegend(this.getPiechart(), [this.getTrendchart()]);
 		this.chartloaded = 0;
-		var chartContainer  = Ext.ComponentQuery.query('viewport > container[itemId=chartcontainer]')[0];
-		var legendContainer = Ext.ComponentQuery.query('viewport > container > container[itemId=commonlegend]')[0];
-		chartContainer.remove(legendContainer);
-		var pieChart = this.getPiechart();
-		var trendChart = this.getTrendchart();
-		var data = pieChart.series.items[0].yField;
-		legendContainer = Ext.create('ERecon.view.CustomeLegend', {
-			itemId : 'commonlegend',
-			xtype : 'customelegend',
-			data: data,
-			multiSeries : [ pieChart.series, trendChart.series ],
-			padding : '5 150 20 200', 
-		});
-		chartContainer.add(legendContainer);
+		if(false) {
+			var chartContainer  = Ext.ComponentQuery.query('viewport > container[itemId=chartcontainer]')[0];
+			var legendContainer = Ext.ComponentQuery.query('viewport > container > container[itemId=commonlegend]')[0];
+			chartContainer.remove(legendContainer);
+			var pieChart = this.getPiechart();
+			var trendChart = this.getTrendchart();
+			var data = pieChart.series.items[0].yField;
+			legendContainer = Ext.create('ERecon.view.CommonLegend', {
+				itemId : 'commonlegend',
+				xtype : 'customelegend',
+				data: data,
+				multiSeries : [ pieChart.series, trendChart.series ],
+				padding : '5 150 20 200', 
+			});
+			chartContainer.add(legendContainer);
+		}
 	},
 
 	renderPieChart : function() {
