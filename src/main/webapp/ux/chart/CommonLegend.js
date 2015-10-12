@@ -31,9 +31,10 @@ Ext.define('Ext.ux.chart.CommonLegend', {
         me.origY = me.y;
     },
 
-    create: function(chart) {
+    create: function(chart, groupedCharts) {
         var me = this, i, ln, series;
 	        me.chart = chart;
+	        me.groupedCharts = groupedCharts;
             seriesItems = me.chart.series.items;
 
         me.createBox();
@@ -45,7 +46,8 @@ Ext.define('Ext.ux.chart.CommonLegend', {
 
 
     isDisplayed: function() {
-    	return this.visible;
+    	return true;
+    	//return this.visible;
     },
 
     createItems: function() {

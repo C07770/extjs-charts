@@ -58,6 +58,7 @@ Ext.define('Ext.ux.chart.CommonLegendComponent', {
 	},
 
 	afterComponentLayout : function(width, height) {
+		console.log('after layout fired....');
 		var me = this;
 		if (Ext.isNumber(width) && Ext.isNumber(height)) {
 			if (width !== me.curWidth || height !== me.curHeight) {
@@ -83,7 +84,7 @@ Ext.define('Ext.ux.chart.CommonLegendComponent', {
 
 		if (legend !== false && legend.visible) {
 			if (legend.update || !legend.created) {
-				legend.create(me.chart);
+				legend.create(me.chart, me.groupedCharts);
 			}
 		}
 

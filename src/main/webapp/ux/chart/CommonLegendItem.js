@@ -87,6 +87,7 @@ Ext.define('Ext.ux.chart.CommonLegendItem', {
             });
             series._index = index;
             series.highlightItem();
+            me.onGroupedChartMouseEvent("mouseover", index);
         }, me);
 
         me.on('mouseout', function() {
@@ -95,6 +96,7 @@ Ext.define('Ext.ux.chart.CommonLegendItem', {
             });
             series._index = index;
             series.unHighlightItem();
+            me.onGroupedChartMouseEvent("mouseout", index);
         }, me);
         
         if (!series.visibleInLegend(index)) {
@@ -118,8 +120,19 @@ Ext.define('Ext.ux.chart.CommonLegendItem', {
             }
             toggle = !toggle;
             me.legend.chart.redraw();
+            me.onGroupedChartMouseEvent("mousedown", index);
         }, me);
         me.updatePosition({x:0, y:0}); 
+    },
+    
+    onGroupedChartMouseEvent : function(eventName, _index) {
+    	var me = this;
+    	if(me.legend.groupedCharts) {
+        	for (var i = 0; i < me.legend.groupedCharts.length; i++) {
+        		var gChartSprite = me.legend.groupedCharts[i].legend.items[_index].items[0]
+        		gChartSprite.fireEvent(eventName);
+			}
+        }
     },
 
     updatePosition: function(relativeTo) {

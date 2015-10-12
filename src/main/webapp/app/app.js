@@ -29,20 +29,20 @@ Ext.define('Ext.chart.theme.CustomTheme',{
 	}
 });
 
-Ext.chart.LegendItem.override({
-	onMouseOver : function(e, t, eOpts) {
-		this.callParent(arguments);
-		this.legend.chart.fireEvent('legendItemMouseOver', this.yFieldIndex, this.label.text, e, t, eOpts);
-	},
-	onMouseOut : function(e, t, eOpts) {
-		this.callParent(arguments);
-		this.legend.chart.fireEvent('legendItemMouseOut', this.yFieldIndex, this.label.text, e, t, eOpts);
-	},
-	onMouseDown : function(e, t, eOpts) {
-		this.callParent(arguments);
-		this.legend.chart.fireEvent('legendItemMouseDown', this.yFieldIndex, this.label.text, e, t, eOpts);
-	}
-});
+//Ext.chart.LegendItem.override({
+//	onMouseOver : function(l, e, eOpts) {
+//		this.callParent(arguments);
+//		this.legend.chart.fireEvent('legendItemMouseOver', this.yFieldIndex, e.type);
+//	},
+//	onMouseOut : function(e, t, eOpts) {
+//		this.callParent(arguments);
+//		this.legend.chart.fireEvent('legendItemMouseOut', this.yFieldIndex, e.type);
+//	},
+//	onMouseDown : function(e, t, eOpts) {
+//		this.callParent(arguments);
+//		this.legend.chart.fireEvent('legendItemMouseDown', this.yFieldIndex, e.type);
+//	}
+//});
 
 Ext.application({
 	name : 'ERecon',

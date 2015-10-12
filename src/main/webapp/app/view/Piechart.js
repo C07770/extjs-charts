@@ -5,9 +5,7 @@ Ext.define('ERecon.view.Piechart', {
 	store : 'Piestore',
 	shadow : true,
 	animate : true,
-	legend : {
-		position : 'left'
-	},
+	legend : false,
 	insetPadding : 60,
 	theme : 'CustomTheme',
 

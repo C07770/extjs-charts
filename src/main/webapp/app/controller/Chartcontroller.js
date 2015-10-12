@@ -26,50 +26,19 @@ Ext.define('ERecon.controller.Chartcontroller', {
 				click : this.renderChart
 			},
 			'piechart' : {
-				legendItemMouseOver : this.onLegendItemMouseOver,
-				legendItemMouseOut  : this.onLegendItemMouseOut,
-				legendItemMouseDown : this.onLegendItemMouseDown
+//				legendItemMouseOver : this.onLegendItemMouseEvent,
+//				legendItemMouseOut  : this.onLegendItemMouseEvent,
+//				legendItemMouseDown : this.onLegendItemMouseEvent
 			},
 			scope : this
 		});
 	},
 	
-	onLegendItemMouseOver : function(legendIndex, b, c) {
+	onLegendItemMouseEvent : function(legendIndex, eventName) {
 		var trendChart = this.getTrendchart();
 		var trendChartLegend = trendChart.legend.items[legendIndex];
 		var trendChartSprite = trendChartLegend.items[0];
-		trendChartSprite.fireEvent("mouseover");
-		
-//		var trendChartSeries = trendChart.series.items[legendIndex];
-//		trendChartSeries.items[legendIndex]._index = legendIndex;
-//		trendChartSeries.highlightItem();
-	},
-	onLegendItemMouseOut : function(legendIndex, b, c) {
-		var trendChart = this.getTrendchart();
-		var trendChartLegend = trendChart.legend.items[legendIndex];
-		var trendChartSprite = trendChartLegend.items[0];
-		trendChartSprite.fireEvent("mouseout");
-		
-//		var trendChartSeries = trendChart.series.items[legendIndex];
-//		trendChartSeries.items[legendIndex]._index = legendIndex;
-//		trendChartSeries.unHighlightItem();
-	},
-	onLegendItemMouseDown : function(legendIndex, b, c) {
-		var trendChart = this.getTrendchart();
-		var trendChartLegend = trendChart.legend.items[legendIndex];
-		var trendChartSprite = trendChartLegend.items[0];
-		trendChartSprite.fireEvent("mousedown");
-		
-		
-//		var trendChartSeries = trendChart.series.items[legendIndex];
-//		trendChartSeries.items[legendIndex]._index = legendIndex;
-//		if (!this.toggle) {
-//			trendChartSeries.hideAll(legendIndex);
-//        } else {
-//        	trendChartSeries.showAll(legendIndex);
-//        }
-//        this.toggle = !this.toggle;
-//        trendChartSeries.chart.redraw();
+		trendChartSprite.fireEvent(eventName);
 	},
 
 	renderChart : function() {
@@ -78,33 +47,14 @@ Ext.define('ERecon.controller.Chartcontroller', {
 	},
 	
 	renderLegends : function() {
-		this.getTrendchart().legend.toggle(false);
-		return;
-		Ext.getCmp('commonlegend').drawLegend(this.getPiechart(), [this.getTrendchart()]);
 		this.chartloaded = 0;
-		if(false) {
-			var chartContainer  = Ext.ComponentQuery.query('viewport > container[itemId=chartcontainer]')[0];
-			var legendContainer = Ext.ComponentQuery.query('viewport > container > container[itemId=commonlegend]')[0];
-			chartContainer.remove(legendContainer);
-			var pieChart = this.getPiechart();
-			var trendChart = this.getTrendchart();
-			var data = pieChart.series.items[0].yField;
-			legendContainer = Ext.create('ERecon.view.CommonLegend', {
-				itemId : 'commonlegend',
-				xtype : 'customelegend',
-				data: data,
-				multiSeries : [ pieChart.series, trendChart.series ],
-				padding : '5 150 20 200', 
-			});
-			chartContainer.add(legendContainer);
-		}
+		this.getTrendchart().legend.toggle(false);
+		Ext.getCmp('commonlegend').drawLegend(this.getPiechart(), [this.getTrendchart()]);
 	},
 
 	renderPieChart : function() {
 		var me = this;
 		var pieChart = this.getPiechart();
-		// pieChart.series.clear();
-		// pieChart.surface.removeAll();
 		
 		var pieChartStore = this.getPiestoreStore();
 		this.requestData('piedata', function(chartData) {
