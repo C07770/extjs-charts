@@ -1,5 +1,5 @@
 Ext.define('Ext.ux.chart.CommonLegendComponent', {
-	alias : 'widget.commonLegendComponent',
+	alias : 'widget.commonlegend',
 	extend : 'Ext.draw.Component',
 
 	requires : [ 'Ext.ux.chart.CommonLegend' ],
@@ -52,13 +52,32 @@ Ext.define('Ext.ux.chart.CommonLegendComponent', {
 		var me = this;
 		me.chart = chart;
 		me.groupedCharts = groupedCharts;
-		me.surface.removeAll();
+
+		// TODO: Different type of series might not support.. Check & Add fn
+		// Steps might be needed: 1) destroy, 2) create new, 3) redraw/refresh
 		if (me.legend !== false) {
 			me.legend = new Ext.ux.chart.CommonLegend(Ext.applyIf({
 				comLegendComp : me
 			}, me.legend));
 		}
 		me.refresh();
+	},
+
+	refresh : function() {
+		var me = this;
+
+		if (me.rendered && me.curWidth !== undefined
+				&& me.curHeight !== undefined) {
+			if (!me.isVisible(true) && !me.refreshPending) {
+				me.setShowListeners('mon');
+				me.refreshPending = true;
+				return;
+			}
+			if (me.fireEvent('beforerefresh', me) !== false) {
+				me.redraw();
+				me.fireEvent('refresh', me);
+			}
+		}
 	},
 
 	afterComponentLayout : function(width, height) {
@@ -96,6 +115,7 @@ Ext.define('Ext.ux.chart.CommonLegendComponent', {
 	},
 
 	afterRender : function() {
+		console.log('after render called..');
 		var ref, me = this;
 		this.callParent();
 
@@ -106,6 +126,12 @@ Ext.define('Ext.ux.chart.CommonLegendComponent', {
 		}
 	},
 
+	// When using a vml surface we need to redraw when this component or one of
+	// its ancestors is moved to a new container after render, because moving
+	// the vml component causes the vml elements to go haywire, some displaing
+	// incorrectly or not displaying at all.
+	// This appears to be caused by the component being moved to the detached
+	// body element before being added to the new container.
 	onAddedVml : function() {
 		this.needsRedraw = true;
 	},
@@ -116,24 +142,4 @@ Ext.define('Ext.ux.chart.CommonLegendComponent', {
 		}
 	},
 
-	refresh : function() {
-		var me = this;
-		if (me.rendered && me.curWidth !== undefined
-				&& me.curHeight !== undefined) {
-
-			if (me.fireEvent('beforerefresh', me) !== false) {
-				me.redraw();
-				me.fireEvent('refresh', me);
-			}
-		}
-	},
-
-	save : function(config) {
-		return Ext.draw.Surface.save(this.surface, config);
-	},
-
-	destroy : function() {
-		Ext.destroy(this.surface);
-		this.callParent(arguments);
-	}
 });

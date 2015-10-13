@@ -41,13 +41,13 @@ Ext.define('Ext.ux.chart.CommonLegend', {
         
         if (me.rebuild !== false) {
             me.createItems();
+            me.updatePosition();
         }
     },
 
 
     isDisplayed: function() {
     	return true;
-    	//return this.visible;
     },
 
     createItems: function() {

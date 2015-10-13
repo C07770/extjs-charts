@@ -47,9 +47,11 @@ Ext.define('ERecon.controller.Chartcontroller', {
 	},
 	
 	renderLegends : function() {
+		console.log('render legends from controller called..');
 		this.chartloaded = 0;
 		this.getTrendchart().legend.toggle(false);
-		Ext.getCmp('commonlegend').drawLegend(this.getPiechart(), [this.getTrendchart()]);
+		var legendCmp = Ext.ComponentQuery.query('[itemId=commonlegend]')[0];
+		legendCmp.drawLegend(this.getPiechart(), [this.getTrendchart()]);
 	},
 
 	renderPieChart : function() {

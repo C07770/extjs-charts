@@ -18,8 +18,8 @@ Ext.define('ERecon.view.Piechart', {
 			trackMouse : true,
 			renderer : function(storeItem, item) {
 				var total = 0;
-				for (var i = 0; i < storeItem.store.getRange().length; i++) {
-					total += storeItem.store.getRange()[i].data.fkcount;
+				for (var i = 0; i < item.series.items.length; i++) {
+					total += item.series.items[i].slice.value;
 				}
 
 				this.update(storeItem.get('description') + ' ('

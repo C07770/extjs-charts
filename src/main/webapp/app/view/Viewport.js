@@ -36,18 +36,17 @@ Ext.define('ERecon.view.Viewport', {
 			} ]
 		}, {
 			xtype : 'commonLegendComponent',
-			id : 'commonlegend',
+			itemId : 'commonlegend',
 			legend : {
 				position : 'top'
-			},
-			height : 100
+			}
 		}
-//		, {
-//			itemId : 'commonlegend',
-//			xtype : 'commonlegend',
-//			data : [],
-//			padding : '5 150 20 200',
-//		} 
+		// , {
+		// itemId : 'commonlegend',
+		// xtype : 'commonlegend',
+		// data : [],
+		// padding : '5 150 20 200',
+		// }
 		]
 	} ]
 });
